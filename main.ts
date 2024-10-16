@@ -1,5 +1,4 @@
-// Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
-
+// The main entry point of the program
 import {runBot} from "./src/bot.ts"
 
 if (import.meta.main) {

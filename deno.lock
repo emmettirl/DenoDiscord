@@ -22,7 +22,8 @@
     "packageJson": {
       "dependencies": [
         "npm:discord.js@^14.16.3",
-        "npm:dotenv@^16.4.5"
+        "npm:dotenv@^16.4.5",
+        "npm:googleapis@144"
       ]
     }
   }

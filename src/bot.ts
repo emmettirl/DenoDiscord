@@ -1,3 +1,5 @@
+// Handles Bot configuration and deployment
+
 import { Client, Guild } from "discord.js";
 import { config } from "./config.ts"
 import { commands } from "./commands/index.ts"
@@ -11,7 +13,6 @@ export function runBot() {
     client.once("ready", async () => {
         console.log("Discord bot is ready! 🤖");
         const Guilds = client.guilds.cache.map(guild => guild.id);
-        console.log(Guilds);
 
         for (const guild of Guilds) {
                 console.log("Deploying to guild: " + guild)
@@ -19,8 +20,7 @@ export function runBot() {
             }
     });
 
-    client.on("guildCreate", async (guild) => {
-        console.log("Found Guild")
+    client.on("guildCreate", async (guild: Guild) => {
         await deployCommands({guildId: guild.id});
     });
 
