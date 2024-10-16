@@ -1,5 +1,5 @@
 import { createRequire } from "node:module";
-import { config } from "./config.ts"
+import { config } from "../../config.ts"
 
 const require = createRequire(import.meta.url);
 const {google} = require('googleapis');
