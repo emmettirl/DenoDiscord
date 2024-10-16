@@ -61,7 +61,7 @@ export async function continueFromRedirect(code:string, interaction: CommandInte
   oauth2Client.setCredentials(tokens);
 
   if(interaction.guildId != null) {
-      const youtubeTokensDirectory = "src/commands/YoutubeLogin/tokens/"
+      const youtubeTokensDirectory = "src/commands/Youtube/tokens/"
       const youtubeTokensFileExtension = ".txt"
       const filename = interaction.guildId
 
@@ -69,4 +69,19 @@ export async function continueFromRedirect(code:string, interaction: CommandInte
 
       Deno.writeTextFile(youtubeTokensDirectory + filename + youtubeTokensFileExtension, JSON.stringify(tokens))
   }
+}
+
+export async function checkforExistingGuildToken(filename: string): Promise<string | null> {
+    const youtubeTokensDirectory = "src/commands/Youtube/tokens/"
+    const youtubeTokensFileExtension = ".txt"
+    const filepath = youtubeTokensDirectory + filename + youtubeTokensFileExtension
+
+    try {
+        (await Deno.lstat(filepath)).isFile
+        console.log("file exists")
+        return JSON.parse(await Deno.readTextFile(filepath));
+    } catch (e) {
+        console.log("file does not exist: " + e);
+        return null
+    }
 }

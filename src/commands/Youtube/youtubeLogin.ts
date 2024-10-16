@@ -1,5 +1,5 @@
-import { CommandInteraction, SlashCommandBuilder } from "discord.js";
-import {startRedirectServer, youtubeOauthLogin} from "./youtubeOauth.ts";
+import {CommandInteraction, SlashCommandBuilder} from "discord.js";
+import {checkforExistingGuildToken, startRedirectServer, youtubeOauthLogin} from "./youtubeOauth.ts";
 
 export const data = new SlashCommandBuilder()
     .setName("youtubelogin")
@@ -11,7 +11,7 @@ export async function execute(interaction: CommandInteraction) {
     var reply
     if (interaction.guildId) {
 
-        const token = await checkforGuildToken(interaction.guildId)
+        const token = await checkforExistingGuildToken(interaction.guildId)
         if (token){
             reply = "token: " + token.toString()
         } else {
@@ -40,17 +40,3 @@ function printInteractionInfo(interaction: CommandInteraction){
     }
 }
 
-async function checkforGuildToken(filename: string): Promise<string | null>{
-    const youtubeTokensDirectory = "src/commands/YoutubeLogin/tokens/"
-    const youtubeTokensFileExtension = ".txt"
-    const filepath = youtubeTokensDirectory + filename + youtubeTokensFileExtension
-
-    try {
-        (await Deno.lstat(filepath)).isFile
-        console.log("file exists")
-        return JSON.parse(await Deno.readTextFile(filepath));
-    } catch (e) {
-        console.log("file does not exist: " + e);
-        return null
-    }
-}

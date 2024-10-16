@@ -2,4 +2,4 @@
 /.env
 /node_modules/
 /client_secret_1027253549918-kq04ko5s55eqtl3vfv0t54o99sijhg2q.apps.googleusercontent.com.json
-/src/commands/YoutubeLogin/tokens/
+/src/commands/Youtube/tokens/

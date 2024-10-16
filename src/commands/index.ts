@@ -1,5 +1,5 @@
 import * as ping from "./ping.ts"
-import * as youtubelogin from "./YoutubeLogin/youtubeLogin.ts"
+import * as youtubelogin from "./Youtube/youtubeLogin.ts"
 
 
 export const commands = {

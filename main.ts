@@ -1,6 +1,7 @@
 // The main entry point of the program
 import {runBot} from "./src/bot.ts"
 
+
 if (import.meta.main) {
   programHeader()
   runBot()
