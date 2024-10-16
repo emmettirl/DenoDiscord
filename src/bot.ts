@@ -11,11 +11,12 @@ export function runBot() {
     });
 
     client.once("ready", async () => {
-        console.log("Discord bot is ready! 🤖");
+        console.log("DenoDiscord bot is ready! 🤖\n");
         const Guilds = client.guilds.cache.map(guild => guild.id);
+        const GuildsNames = client.guilds.cache.map(guild => guild.name);
 
         for (const guild of Guilds) {
-                console.log("Deploying to guild: " + guild)
+                console.log("Deploying to guild: " + GuildsNames[Guilds.indexOf(guild)] + ", Id:" + guild)
                 await deployCommands({guildId: guild})
             }
     });

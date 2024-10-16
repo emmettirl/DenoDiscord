@@ -1,5 +1,6 @@
-import { createRequire } from "node:module";
-import { config } from "../../config.ts"
+import {createRequire} from "node:module";
+import {config} from "../../config.ts"
+import {CommandInteraction} from "discord.js";
 
 const require = createRequire(import.meta.url);
 const {google} = require('googleapis');
@@ -17,14 +18,55 @@ const scopes = [
 
 
 export function youtubeOauthLogin(): string {
-  const url = oauth2Client.generateAuthUrl({
-    // 'online' (default) or 'offline' (gets refresh_token)
-    access_type: 'offline',
+    return oauth2Client.generateAuthUrl({
+      // 'online' (default) or 'offline' (gets refresh_token)
+      access_type: 'offline',
 
-    // If you only need one scope, you can pass it as a string
-    scope: scopes
-  });
+      // If you only need one scope, you can pass it as a string
+      scope: scopes
+  })
+}
 
+export function startRedirectServer(interaction: CommandInteraction) {
 
-  return url
+  Deno.serve(
+      // deno-lint-ignore require-await
+      async (req) => {
+        console.log("Method:", req.method);
+
+        const url = new URL(req.url);
+        const code: string | null = url.searchParams.get("code")
+        console.log("Path:", url.pathname);
+        console.log("Query parameters:", url.searchParams);
+        console.log("Code parameter:", code);
+
+        console.log("Headers:", req.headers);
+
+        if (code) {
+          continueFromRedirect(code, interaction)
+        }
+
+        return new Response("Thanks for logging in, you can now use DenoDiscord with youtube", {
+          status: 200,
+          headers: {
+            "content-type": "text/plain; charset=utf-8",
+          },
+        });
+      });
+}
+
+export async function continueFromRedirect(code:string, interaction: CommandInteraction): Promise<void> {
+  console.log("completed redirect code: " + code)
+  const {tokens} = await oauth2Client.getToken(code)
+  oauth2Client.setCredentials(tokens);
+
+  if(interaction.guildId != null) {
+      const youtubeTokensDirectory = "src/commands/YoutubeLogin/tokens/"
+      const youtubeTokensFileExtension = ".txt"
+      const filename = interaction.guildId
+
+      try {Deno. mkdir(youtubeTokensDirectory)} catch {console.log("directory already exists")}
+
+      Deno.writeTextFile(youtubeTokensDirectory + filename + youtubeTokensFileExtension, JSON.stringify(tokens))
+  }
 }

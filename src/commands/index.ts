@@ -6,5 +6,3 @@ export const commands = {
     ping,
     youtubelogin
 };
-
-
