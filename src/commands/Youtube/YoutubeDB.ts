@@ -29,7 +29,7 @@ export class YoutubeDB {
         this.insertGuild("guildIdPlaceholder")
         this.insertYoutubeChannel("youtubeTokenPlaceholder")
         this.insertDiscordChannel("discordChannelIdPlaceholder")
-        this.insertVideo("videoIdPlaceholder")
+        // this.insertVideo("videoIdPlaceholder")
     }
 
     async insertGuild(guildId: string) {
