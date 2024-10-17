@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS videos
     id             INTEGER PRIMARY KEY AUTOINCREMENT,
     youtubeVideoId TEXT,
     guildId        TEXT,
-    playlistId     TEXT,
-    FOREIGN KEY (playlistId) REFERENCES discordChannels (youTubePlaylistId),
+    youtubePlaylistId     TEXT,
+    FOREIGN KEY (youtubePlaylistId) REFERENCES discordChannels (youtubePlaylistId),
     FOREIGN KEY (guildId) REFERENCES guilds (guildId)
 );

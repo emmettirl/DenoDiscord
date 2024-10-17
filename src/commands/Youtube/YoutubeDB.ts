@@ -24,15 +24,13 @@ export class YoutubeDB {
 
     async populateMockData() {
         const insertDiscordChannel = await Deno.readTextFile("src/commands/Youtube/sql/insertDiscordChannel.sql");
-        // const insertYoutubeChannel = await Deno.readTextFile("src/commands/Youtube/sql/insertYoutubeChannel.sql");
         // const insertYoutubeVideo = await Deno.readTextFile("src/commands/Youtube/sql/insertYoutubeVideo.sql");
 
         this.insertGuild("guildIdPlaceholder")
-
-        // this.db.query(insertDiscordChannel, ["discordChannelIdPlaceholder", "discordChannelNamePlaceholder", "guildIdPLaceholder","youtubePlaylistIDPlaceholder",1])
-
+        this.insertYoutubeChannel("youtubeTokenPlaceholder")
+        this.insertDiscordChannel("discordChannelIdPlaceholder")
+        this.insertVideo("videoIdPlaceholder")
     }
-
 
     async insertGuild(guildId: string) {
         const guildIds = this.db.query(`SELECT guildId FROM guilds`)
@@ -44,8 +42,53 @@ export class YoutubeDB {
         }
 
         const insertGuildQuery = await Deno.readTextFile("src/commands/Youtube/sql/insertGuild.sql");
-        this.db.query(insertGuildQuery, ["guildIdPlaceholder","guildNamePlaceholder", "youtubeTokenPlaceholder"])
+        this.db.query(insertGuildQuery, [guildId, "guildNamePlaceholder", "youtubeTokenPlaceholder"])
         console.log(`complete insert of ${guildId}`)
+    }
+
+    async insertYoutubeChannel(youtubeToken: string) {
+        const youtubeTokens = this.db.query(`SELECT youtubeToken FROM youtubeChannels`)
+        for (const token of youtubeTokens) {
+            if (token[0] == youtubeToken) {
+                console.log(`${youtubeToken} found in database, canceling insert`);
+                return
+            }
+        }
+
+        const insertYoutubeChannel = await Deno.readTextFile("src/commands/Youtube/sql/insertYoutubeChannel.sql");
+        this.db.query(insertYoutubeChannel, ["youtubeTokenPlaceholder", "youtubeChannelNamePlaceholder", "guildIdPlaceholder"])
+
+        const ytChannelId = this.db.query(`SELECT id FROM youtubeChannels`)
+
+        console.log(`complete insert of ${ytChannelId[0][0]}`)
+    }
+
+    async insertDiscordChannel(channelId: string) {
+        const channelIds = this.db.query(`SELECT discordChannelId FROM discordChannels`)
+        for (const channel of channelIds) {
+            if (channel[0] == channelId) {
+                console.log(`${channelId} found in database, canceling insert`);
+                return
+            }
+        }
+
+        const insertDiscordChannelQuery = await Deno.readTextFile("src/commands/Youtube/sql/insertDiscordChannel.sql");
+        this.db.query(insertDiscordChannelQuery, [channelId, "discordChannelNamePlaceHolder", "guildIdPlaceholder", "youtubePlaylistIdPlaceholder", String(1)])
+        console.log(`complete insert of ${channelId}`)
+    }
+
+    async insertVideo(videoId: string) {
+        const videoIds = this.db.query(`SELECT id FROM videos`)
+        for (const video of videoIds) {
+            if (video[0] == videoId) {
+                console.log(`${videoId} found in database, canceling insert`);
+                return
+            }
+        }
+
+        const insertYoutubeVideoQuery = await Deno.readTextFile("src/commands/Youtube/sql/insertYoutubeVideo.sql");
+        this.db.query(insertYoutubeVideoQuery, [videoId, "guildIdPlaceholder", "youtubePlaylistIdPlaceholder"])
+        console.log(`complete insert of ${videoId}`)
     }
 }
 

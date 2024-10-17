@@ -3,7 +3,7 @@ INTO videos
     (
      youtubeVideoId,
      guildId,
-     playlistId
+     youtubePlaylistId
     )
 VALUES
     (
