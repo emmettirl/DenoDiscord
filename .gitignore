@@ -4,3 +4,6 @@
 /client_secret_1027253549918-kq04ko5s55eqtl3vfv0t54o99sijhg2q.apps.googleusercontent.com.json
 /src/commands/Youtube/tokens/
 /src/commands/Youtube/youtube.sqlite
+/.idea/
+/youtube.sqlite
+/test.txt
