@@ -1,6 +1,6 @@
 import { DB } from "https://deno.land/x/sqlite/mod.ts";
 
-class YoutubeDatabase {
+export class YoutubeDatabase {
 
     dbPath = `src/commands/Youtube/youtube.sqlite`;
     schemaPath = "src/commands/Youtube/YTDBSchema.sql"
@@ -11,7 +11,7 @@ class YoutubeDatabase {
         console.log(DB.constructor);
         this.db= new DB(this.dbPath);
         this.createDbTables()
-        this.populateMockData()
+        // this.populateMockData()
     }
 
     async createDbTables() {

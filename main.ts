@@ -1,7 +1,10 @@
 // The main entry point of the program
 import { runBot } from "./src/bot.ts";
+import {YoutubeDatabase} from "./src/commands/Youtube/YoutubeDatabase.ts"
 
 if (import.meta.main) {
+  const ytdb: YoutubeDatabase = new YoutubeDatabase()
+
   programHeader();
   runBot();
 }
