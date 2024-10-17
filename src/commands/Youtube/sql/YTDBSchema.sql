@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS discordChannels
     discordChannelId   TEXT PRIMARY KEY,
     discordChannelName TEXT,
     guildId            TEXT,
-    youTubePlaylistId  TEXT,
+    youtubePlaylistId  TEXT,
     youtubeChannelId   INTEGER,
     FOREIGN KEY (guildId) REFERENCES guilds (guildId),
     FOREIGN KEY (youtubeChannelId) REFERENCES youtubeChannels (id)

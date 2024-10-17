@@ -3,7 +3,7 @@ import {
   checkforExistingGuildToken,
   startRedirectServer,
   youtubeOauthLogin,
-} from "./youtubeOauth.ts";
+} from "./youtubeOauthController.ts";
 
 export const data = new SlashCommandBuilder()
   .setName("youtubelogin")
