@@ -1,25 +1,56 @@
 import { DB } from "https://deno.land/x/sqlite/mod.ts";
 import {populate} from "dotenv";
 
+
+
 export class YoutubeDB {
 
-    dbPath = `src/commands/Youtube/sql/ytdb.db`;
-    schemaPath = "src/commands/Youtube/sql/YTDBSchema.sql"
-    db: DB;
+    private static _instance: YoutubeDB | null = null;
+    private _initialized: boolean = false;
 
-    constructor() {
+    private dbPath = `src/commands/Youtube/sql/ytdb.db`;
+    private schemaPath = "src/commands/Youtube/sql/YTDBSchema.sql"
+
+    private db!: DB;
+    private kv!: Deno.Kv
+
+    private constructor() {
         console.log(DB.constructor);
-        this.db= new DB(this.dbPath);
-        this.createDbTables()
-        // this.populateMockData()
+    }
+
+    public static async getInstance(): Promise<YoutubeDB> {
+        if (this._instance === null) {
+            // Create instance if it doesn't exist
+            this._instance = new YoutubeDB();
+            // Call the async initialize method automatically
+            await this._instance.initialize();
+        }
+        return this._instance;
+    }
+
+    public async initialize(){
+        if (!this._initialized) {
+            console.log("Initializing Singleton...");
+
+            this.db = new DB(this.dbPath);
+            this.createDbTables()
+            this.kv = await Deno.openKv();
+
+            this._initialized = true;
+            console.log("Singleton Initialized.");
+        }
     }
 
     async createDbTables() {
         console.log("Creating tables");
         const schema = Deno.readTextFile(this.schemaPath);
-        this.db.execute(await schema);
-
-        this.populateMockData()
+        if (this.db == null) {
+            await this.initialize();
+            this.createDbTables()
+        } else {
+            this.db.execute(await schema);
+            this.populateMockData()
+        }
     }
 
     async populateMockData() {
@@ -91,7 +122,3 @@ export class YoutubeDB {
         console.log(`complete insert of ${videoId}`)
     }
 }
-
-
-
-

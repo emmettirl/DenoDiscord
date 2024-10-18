@@ -4,6 +4,7 @@ import {YoutubeDB} from "./src/commands/Youtube/YoutubeDB.ts"
 
 if (import.meta.main) {
   const ytdb: YoutubeDB = new YoutubeDB()
+  ytdb.initialize();
 
   programHeader();
   runBot();
