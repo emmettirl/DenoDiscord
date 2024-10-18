@@ -22,7 +22,7 @@ export class YoutubeDB {
             console.log("Initializing Singleton...");
 
             this.db = new DB(this.dbPath);
-            this.createDbTables()
+            await this.createDbTables()
             this.kv = await Deno.openKv()
 
             this._initialized = true;
@@ -48,10 +48,10 @@ export class YoutubeDB {
         const schema = Deno.readTextFile(this.schemaPath);
         if (this.db == null) {
             await this.initialize();
-            this.createDbTables()
+            await this.createDbTables()
         } else {
             this.db.execute(await schema);
-            this.populateMockData()
+            await this.populateMockData()
         }
     }
 
@@ -59,9 +59,9 @@ export class YoutubeDB {
         // const insertDiscordChannel = await Deno.readTextFile("src/commands/Youtube/sql/insertDiscordChannel.sql");
         // const insertYoutubeVideo = await Deno.readTextFile("src/commands/Youtube/sql/insertYoutubeVideo.sql");
 
-        this.insertGuild("guildIdPlaceholder")
-        this.insertYoutubeChannel("youtubeTokenPlaceholder")
-        this.insertDiscordChannel("discordChannelIdPlaceholder")
+        await this.insertGuild("guildIdPlaceholder")
+        await this.insertYoutubeChannel("youtubeTokenPlaceholder")
+        await this.insertDiscordChannel("discordChannelIdPlaceholder")
         // this.insertVideo("videoIdPlaceholder")
     }
 

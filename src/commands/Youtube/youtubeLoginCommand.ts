@@ -1,6 +1,6 @@
 import { CommandInteraction, SlashCommandBuilder } from "discord.js";
 import {
-  checkforExistingGuildToken,
+  checkForExistingGuildToken,
   startRedirectServer,
   youtubeOauthLogin,
 } from "./youtubeOauthController.ts";
@@ -12,9 +12,9 @@ export const data = new SlashCommandBuilder()
 export async function execute(interaction: CommandInteraction) {
   printInteractionInfo(interaction);
 
-  var reply;
+  let reply;
   if (interaction.guildId) {
-    const token = await checkforExistingGuildToken(interaction.guildId);
+    const token = await checkForExistingGuildToken(interaction.guildId);
     if (token) {
       reply = "token: " + token.toString();
     } else {

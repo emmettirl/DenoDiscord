@@ -1,9 +1,6 @@
-import { createRequire } from "node:module";
 import { config } from "../../config.ts";
 import { CommandInteraction } from "discord.js";
-
-const require = createRequire(import.meta.url);
-const { google } = require("googleapis");
+import { google } from "googleapis";
 
 const oauth2Client = new google.auth.OAuth2(
   config.YOUTUBE_CLIENT_ID,
@@ -11,7 +8,7 @@ const oauth2Client = new google.auth.OAuth2(
   config.YOUTUBE_REDIRECT_URL,
 );
 
-// generate a url that asks permissions for Youtube
+// generate an url that asks permissions for YouTube
 const scopes = [
   "https://www.googleapis.com/auth/youtube.force-ssl",
 ];
@@ -28,7 +25,6 @@ export function youtubeOauthLogin(): string {
 
 export function startRedirectServer(interaction: CommandInteraction) {
   Deno.serve(
-    // deno-lint-ignore require-await
     async (req) => {
       console.log("Method:", req.method);
 
@@ -41,7 +37,7 @@ export function startRedirectServer(interaction: CommandInteraction) {
       console.log("Headers:", req.headers);
 
       if (code) {
-        continueFromRedirect(code, interaction);
+        await continueFromRedirect(code, interaction);
       }
 
       return new Response(
@@ -71,19 +67,19 @@ export async function continueFromRedirect(
     const filename = interaction.guildId;
 
     try {
-      Deno.mkdir(youtubeTokensDirectory);
+        await Deno.mkdir(youtubeTokensDirectory);
     } catch {
       console.log("directory already exists");
     }
 
-    Deno.writeTextFile(
+      await Deno.writeTextFile(
       youtubeTokensDirectory + filename + youtubeTokensFileExtension,
       JSON.stringify(tokens),
     );
   }
 }
 
-export async function checkforExistingGuildToken(
+export async function checkForExistingGuildToken(
   filename: string,
 ): Promise<string | null> {
   const youtubeTokensDirectory = "src/commands/Youtube/tokens/";

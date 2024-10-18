@@ -11,9 +11,9 @@ if (import.meta.main) {
 }
 
 function programHeader() {
-  var consoleWidth = 50;
-  var headerChar = "#";
-  var lineChar = "-";
+  const consoleWidth = 50;
+  const headerChar = "#";
+  const lineChar = "-";
 
   console.log(headerChar.repeat(consoleWidth));
   console.log("DenoDiscord");

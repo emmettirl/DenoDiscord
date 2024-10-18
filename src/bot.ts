@@ -34,9 +34,9 @@ export function runBot() {
     }
     const { commandName } = interaction;
     if (commands[commandName as keyof typeof commands]) {
-      commands[commandName as keyof typeof commands].execute(interaction);
+      await commands[commandName as keyof typeof commands].execute(interaction);
     }
   });
 
-  client.login(config.DISCORD_TOKEN);
+  return client.login(config.DISCORD_TOKEN);
 }
