@@ -1,7 +1,4 @@
 import { DB } from "https://deno.land/x/sqlite/mod.ts";
-import {populate} from "dotenv";
-
-
 
 export class YoutubeDB {
 
@@ -14,8 +11,23 @@ export class YoutubeDB {
     private db!: DB;
     private kv!: Deno.Kv
 
+    // /////////////////////////////////////////////////////////////////////////////////////// //
+
     private constructor() {
         console.log(DB.constructor);
+    }
+
+    public async initialize(){
+        if (!this._initialized) {
+            console.log("Initializing Singleton...");
+
+            this.db = new DB(this.dbPath);
+            this.createDbTables()
+            this.kv = await Deno.openKv()
+
+            this._initialized = true;
+            console.log("Singleton Initialized.");
+        }
     }
 
     public static async getInstance(): Promise<YoutubeDB> {
@@ -28,18 +40,8 @@ export class YoutubeDB {
         return this._instance;
     }
 
-    public async initialize(){
-        if (!this._initialized) {
-            console.log("Initializing Singleton...");
+    // /////////////////////////////////////////////////////////////////////////////////////// //
 
-            this.db = new DB(this.dbPath);
-            this.createDbTables()
-            this.kv = await Deno.openKv();
-
-            this._initialized = true;
-            console.log("Singleton Initialized.");
-        }
-    }
 
     async createDbTables() {
         console.log("Creating tables");
@@ -54,7 +56,7 @@ export class YoutubeDB {
     }
 
     async populateMockData() {
-        const insertDiscordChannel = await Deno.readTextFile("src/commands/Youtube/sql/insertDiscordChannel.sql");
+        // const insertDiscordChannel = await Deno.readTextFile("src/commands/Youtube/sql/insertDiscordChannel.sql");
         // const insertYoutubeVideo = await Deno.readTextFile("src/commands/Youtube/sql/insertYoutubeVideo.sql");
 
         this.insertGuild("guildIdPlaceholder")

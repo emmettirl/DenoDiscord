@@ -3,7 +3,7 @@ import { runBot } from "./src/bot.ts";
 import {YoutubeDB} from "./src/commands/Youtube/YoutubeDB.ts"
 
 if (import.meta.main) {
-  const ytdb: YoutubeDB = new YoutubeDB()
+  const ytdb: YoutubeDB = await YoutubeDB.getInstance()
   ytdb.initialize();
 
   programHeader();
